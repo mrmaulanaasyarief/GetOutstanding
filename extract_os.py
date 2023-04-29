@@ -132,28 +132,28 @@ def main():
 
                 begin += 1
                 
-            if total_total_month != 0:
-                created_sheet["C"+str(begin)] = total_ut
-                created_sheet["D"+str(begin)] = total_sc
-                created_sheet["E"+str(begin)] = total_sf
-                created_sheet["F"+str(begin)] = total_total_month
+        if total_total_month != 0:
+            created_sheet["C"+str(begin)] = total_ut
+            created_sheet["D"+str(begin)] = total_sc
+            created_sheet["E"+str(begin)] = total_sf
+            created_sheet["F"+str(begin)] = total_total_month
 
-                created_sheet["C"+str(begin)].number_format = 'Rp #,##'
-                created_sheet["D"+str(begin)].number_format = 'Rp #,##'
-                created_sheet["E"+str(begin)].number_format = 'Rp #,##'
-                created_sheet["F"+str(begin)].number_format = 'Rp #,##'
+            created_sheet["C"+str(begin)].number_format = 'Rp #,##'
+            created_sheet["D"+str(begin)].number_format = 'Rp #,##'
+            created_sheet["E"+str(begin)].number_format = 'Rp #,##'
+            created_sheet["F"+str(begin)].number_format = 'Rp #,##'
 
-                created_sheet["E"+str(begin+1)] = "Total Bill"
-                created_sheet["F"+str(begin+1)] = total_ut + total_sc + total_sf
+            created_sheet["E"+str(begin+1)] = "Total Bill"
+            created_sheet["F"+str(begin+1)] = total_ut + total_sc + total_sf
 
-                created_sheet["F"+str(begin+1)].number_format = 'Rp #,##'
+            created_sheet["F"+str(begin+1)].number_format = 'Rp #,##'
 
-                created_sheet["E"+str(begin+1)].font = Font(bold=True)
-                created_sheet["F"+str(begin+1)].font = Font(bold=True)
+            created_sheet["E"+str(begin+1)].font = Font(bold=True)
+            created_sheet["F"+str(begin+1)].font = Font(bold=True)
 
-                created_sheet["E"+str(begin+1)].alignment = Alignment(horizontal='right')
-            
-        del workbook[title]
+            created_sheet["E"+str(begin+1)].alignment = Alignment(horizontal='right')
+        else:
+            del workbook[title]
             
     del workbook[workbook.sheetnames[0]]
     workbook.save(filename= "C:\\Users\\mrmau\\Documents\\Cevin\\GetOutstanding\\Outstanding April 2023.xlsx")
