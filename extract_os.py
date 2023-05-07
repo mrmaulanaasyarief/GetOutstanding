@@ -7,11 +7,54 @@ from openpyxl.styles import Font
 from openpyxl.workbook.child import INVALID_TITLE_REGEX
 import glob
 import os
+from tkinter import Tk
+from tkinter.filedialog import askopenfilename
+import tkinter.messagebox
+
+# Print iterations progress
+def printProgressBar (iteration, total, prefix = '', suffix = '', decimals = 1, length = 100, fill = '█', printEnd = "\r"):
+    """
+    Call in a loop to create terminal progress bar
+    @params:
+        iteration   - Required  : current iteration (Int)
+        total       - Required  : total iterations (Int)
+        prefix      - Optional  : prefix string (Str)
+        suffix      - Optional  : suffix string (Str)
+        decimals    - Optional  : positive number of decimals in percent complete (Int)
+        length      - Optional  : character length of bar (Int)
+        fill        - Optional  : bar fill character (Str)
+        printEnd    - Optional  : end character (e.g. "\r", "\r\n") (Str)
+    """
+    percent = ("{0:." + str(decimals) + "f}").format(100 * (iteration / float(total)))
+    filledLength = int(length * iteration // total)
+    bar = fill * filledLength + '-' * (length - filledLength)
+    print(f'\r{prefix} |{bar}| {percent}% {suffix}', end = printEnd)
+    # Print New Line on Complete
+    if iteration == total: 
+        print()
 
 def main():
+    Tk().withdraw() # we don't want a full GUI, so keep the root window from appearing
+    while True:
+        filename = askopenfilename(title="Select XLSX File") # show an "Open" dialog box and return the path to the selected file
+        if(filename==""):
+            if tkinter.messagebox.askretrycancel("Error",  "No XLSX file selected"):
+                pass
+            else:
+                exit()
+        else:
+            if(filename.lower().endswith(".xlsx")):
+                break
+            else:
+                if tkinter.messagebox.askretrycancel("Error",  "Selected file must be in XLSX format"):
+                    pass
+                else:
+                    exit()
+
     path =  os.path.dirname(os.path.realpath(__file__))
-    folder_name = "source"
-    read_files = glob.glob(path+"/" + folder_name + "/*.xlsx")
+    # folder_name = "source"
+    # read_files = glob.glob(path+"/" + folder_name + "/*.xlsx")
+    read_files = [filename]
 
     for read_file in read_files:
         # opening the source excel file
@@ -26,6 +69,8 @@ def main():
         start = 7
         end = 356
 
+        print("Getting Outstanding")
+        printProgressBar(0, end-start, prefix = 'Progress:', suffix = 'Complete', length = 50)
         # loop trough row of data
         for i in range(start,end+1):
             # create new sheet with unit + tenant combined as sheet name
@@ -34,7 +79,7 @@ def main():
 
             title = sheet_name if len(sheet_name) <= 31 else sheet_name[:31]
             workbook.create_sheet(title) # no more than 31 char
-            print(sheet_name)
+            # print(sheet_name)
 
 
             # write unit and name on created sheet
@@ -164,11 +209,16 @@ def main():
                 created_sheet["E"+str(begin+1)].alignment = Alignment(horizontal='right')
             else:
                 del workbook[title]
-                
+
+            printProgressBar(i-start, end-start, prefix = 'Progress:', suffix = 'Complete', length = 50)        
+        
         del workbook[workbook.sheetnames[0]]
         # get csv file name
+        print("Saving Outstanding...")
         file_name = read_file.split("\\")[-1].split("/")[-1][:-5]
         workbook.save(filename= path+"/" + "result" + "/Outstanding " + file_name + ".xlsx")
+    print("DONE!")
+    tkinter.messagebox.showinfo("Done", "Outstanding Table Generated")
 
 
 def content_checker(sheet, value):
