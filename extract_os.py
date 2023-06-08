@@ -213,6 +213,11 @@ def main():
             printProgressBar(i-start, end-start, prefix = 'Progress:', suffix = 'Complete', length = 50)        
         
         del workbook[workbook.sheetnames[0]]
+
+        # checking dir
+        if not os.path.exists(path + "/result"):
+            # then create it.
+            os.makedirs(path + "/result")
         # get csv file name
         print("Saving Outstanding...")
         file_name = read_file.split("\\")[-1].split("/")[-1][:-5]
