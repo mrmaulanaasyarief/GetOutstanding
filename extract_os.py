@@ -66,8 +66,8 @@ def main():
             del workbook[title]
         
         # set the start and end of row of data
-        start = 7
-        end = 356
+        start = int(input("Enter the first column number of tenant data : "))
+        end = int(input("Enter the last column number of tenant data : "))
 
         print("Getting Outstanding")
         printProgressBar(0, end-start, prefix = 'Progress:', suffix = 'Complete', length = 50)
