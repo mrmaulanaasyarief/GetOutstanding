@@ -179,7 +179,7 @@ def main():
                     created_sheet["E"+str(begin)].border = thin_border
                     created_sheet["F"+str(begin)].border = thin_border
 
-                    created_sheet["B"+str(begin)].number_format = 'Rp #,##'
+                    created_sheet["B"+str(begin)].number_format = 'MMMM y'
                     created_sheet["C"+str(begin)].number_format = 'Rp #,##'
                     created_sheet["D"+str(begin)].number_format = 'Rp #,##'
                     created_sheet["E"+str(begin)].number_format = 'Rp #,##'
