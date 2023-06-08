@@ -1,2 +1,4 @@
 result/*
 source/*
+.DS_Store
+*.xlsx
