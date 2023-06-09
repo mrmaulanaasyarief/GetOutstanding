@@ -101,6 +101,11 @@ def main():
 
             # set dict for all value per month
             data_dict = {}
+            denda = {}
+
+            # get utility value per month
+            value = "Denda"
+            denda = get_all_total_value(i, value, denda, sheet)
 
             # get utility value per month
             value = "Utility"
@@ -141,6 +146,7 @@ def main():
             total_sc = 0
             total_sf = 0
             total_total_month = 0
+
             # Iterating over values
             for month, bill in data_dict.items():
                 ut = bill["Utility"] if "Utility" in bill else "0"
@@ -198,15 +204,31 @@ def main():
                 created_sheet["E"+str(begin)].number_format = 'Rp #,##' if total_sf != 0 else ""
                 created_sheet["F"+str(begin)].number_format = 'Rp #,##'
 
-                created_sheet["E"+str(begin+1)] = "Total Bill"
-                created_sheet["F"+str(begin+1)] = total_ut + total_sc + total_sf
 
-                created_sheet["F"+str(begin+1)].number_format = 'Rp #,##'
+                denda = denda["Denda"] if denda["Denda"] is not None else 0
+                created_sheet["E"+str(begin+1)] = "Late Charge"
+                if denda != 0:
+                    created_sheet["F"+str(begin+1)] = denda
+
+                    created_sheet["F"+str(begin+1)].number_format = 'Rp #,##'
+                else:
+                    created_sheet["F"+str(begin+1)] = "-"
 
                 created_sheet["E"+str(begin+1)].font = Font(bold=True)
-                created_sheet["F"+str(begin+1)].font = Font(bold=True)
 
                 created_sheet["E"+str(begin+1)].alignment = Alignment(horizontal='right')
+                created_sheet["F"+str(begin+1)].alignment = Alignment(horizontal='right')
+
+
+                created_sheet["E"+str(begin+2)] = "Total Bill"
+                created_sheet["F"+str(begin+2)] = total_ut + total_sc + total_sf + denda
+
+                created_sheet["F"+str(begin+2)].number_format = 'Rp #,##'
+
+                created_sheet["E"+str(begin+2)].font = Font(bold=True)
+                created_sheet["F"+str(begin+2)].font = Font(bold=True)
+
+                created_sheet["E"+str(begin+2)].alignment = Alignment(horizontal='right')
             else:
                 del workbook[title]
 
@@ -260,10 +282,13 @@ def get_all_total_value(i, value, data_dict, sheet):
                 else:
                     total = ""
 
-                if month not in data_dict:
-                    data_dict[month] = {}
-                
-                data_dict[month][value] = total
+                if value == "Denda":
+                    data_dict["Denda"] = total
+                else:
+                    if month not in data_dict:
+                        data_dict[month] = {}
+
+                    data_dict[month][value] = total
     return data_dict
 
 if __name__ == '__main__':
